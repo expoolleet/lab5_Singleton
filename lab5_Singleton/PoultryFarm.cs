@@ -1,4 +1,5 @@
-﻿using System;
+﻿using lab5_Singleton.Ducks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,18 +10,14 @@ namespace lab5_Singleton
     class PoultryFarm
     {
         static object locker = new();
-        private string[] ducks;
+        private Duck[] ducks;
         private static PoultryFarm farm;
-        private PoultryFarm(string[] ducksArray)
+        private PoultryFarm(Duck[] duckArray)
         {
-            ducks = new string[ducksArray.Length];
-            for (int i = 0; i < ducksArray.Length; i++)
-            {
-                ducks[i] = ducksArray[i];
-            }
+            ducks = duckArray;
         }
   
-        public static PoultryFarm Get(string[] ducks)
+        public static PoultryFarm Get(Duck[] ducks)
         {
             if (farm == null)
             {
@@ -36,9 +33,9 @@ namespace lab5_Singleton
         public void Info()
         {
             Console.WriteLine("Утки: ");
-            for (int i = 0; i < ducks.Length; i++)
+           foreach(var duck in ducks)
             {
-                Console.WriteLine($"{i+1}. {ducks[i]}");
+                Console.WriteLine(duck.Name);
             }
         }
     }
