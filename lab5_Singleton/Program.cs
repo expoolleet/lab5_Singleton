@@ -1,44 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using lab5_Singleton.Ducks;
-
 
 namespace lab5_Singleton
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Duck[] duckArray = { new DomesticDuck(), new WildDuck() };
+            var threds = new List<Thread>();
 
-            PoultryFarm farm = PoultryFarm.Get(duckArray);
+            Console.WriteLine("Генерирование 100 потоков...");
+            for (int i = 1; i < 100; i++)
+            {
+                Thread myThread = new(_ => PoultryFarm.Get());
+                threds.Add(myThread);   
+            }
 
+            foreach (var item in threds)
+            {
+                item.Start();
+            }
 
+            foreach (var item in threds)
+            {
+                item.Join();
+            }
+
+            Console.WriteLine($"Количество ссылок на ферму: {PoultryFarm.Count}");
+
+            PoultryFarm farm = PoultryFarm.Get();
+
+            farm.Add(new Duck[] { new DomesticDuck(), new GrayDuck(), new WildDuck() });
             farm.Info();
 
-            Thread thread = Thread.CurrentThread;
-            thread.Name = "Main поток";
-            Console.WriteLine($"Имя: {thread.Name}");
-            Console.WriteLine($"Запущен ли: {thread.IsAlive}");
-            Console.WriteLine($"ID: {thread.ManagedThreadId}");
-            Console.WriteLine($"Приоритет: {thread.Priority}");
-            Console.WriteLine($"Статус: {thread.ThreadState}");
-            Console.WriteLine(Thread.GetDomain());
-            Thread.Sleep(1000);
-            Console.WriteLine("test");
-
-
-            //int x = 0;
-
-            //for (int i = 1; i < 6; i++)
-            //{
-            //    Thread myThread = new();
-            //    myThread.Name = $"Поток {i}";
-            //    myThread.Start();
-            //}
-
-
-           
             Console.ReadKey();
         }
     }
