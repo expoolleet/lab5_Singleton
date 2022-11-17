@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace lab5_Singleton
 {
@@ -12,28 +13,48 @@ namespace lab5_Singleton
         static object locker = new();
         private Duck[] ducks;
         private static PoultryFarm farm;
-        private PoultryFarm(Duck[] duckArray)
+        static int count;
+
+        static public int Count
         {
-            ducks = duckArray;
+            get
+            {
+                return count;
+            }
+            protected set
+            {
+                count = value;
+            }
         }
-  
-        public static PoultryFarm Get(Duck[] ducks)
+        private PoultryFarm()
+        {
+            count++;
+        }
+
+        public static PoultryFarm Get()
         {
             if (farm == null)
             {
                 lock (locker)
                 {
-                    farm = new PoultryFarm(ducks);
+                    if (farm == null) 
+                    {
+                        farm = new PoultryFarm();
+                    }
                 }
             }
             return farm;
+        }
 
+        public void Add(Duck[] ducks)
+        {
+            this.ducks = ducks;
         }
 
         public void Info()
         {
             Console.WriteLine("Утки: ");
-           foreach(var duck in ducks)
+            foreach (var duck in ducks)
             {
                 Console.WriteLine(duck.Name);
             }

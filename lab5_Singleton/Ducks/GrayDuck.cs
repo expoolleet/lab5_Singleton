@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace lab5_Singleton.Ducks
 {
-    class WildDuck : Duck
+    class GrayDuck: Duck
     {
-       public WildDuck() : base("Дикая утка") { }
+        public GrayDuck() : base ("Серая утка") { }
     }
 }
