@@ -1,44 +1,62 @@
-﻿using System;
+﻿using lab5_Singleton.Ducks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace lab5_Singleton
 {
     class PoultryFarm
     {
         static object locker = new();
-        private string[] ducks;
+        private Duck[] ducks;
         private static PoultryFarm farm;
-        private PoultryFarm(string[] ducksArray)
+        static int count;
+
+        static public int Count
         {
-            ducks = new string[ducksArray.Length];
-            for (int i = 0; i < ducksArray.Length; i++)
+            get
             {
-                ducks[i] = ducksArray[i];
+                return count;
+            }
+            protected set
+            {
+                count = value;
             }
         }
-  
-        public static PoultryFarm Get(string[] ducks)
+        private PoultryFarm()
+        {
+            count++;
+        }
+
+        public static PoultryFarm Get()
         {
             if (farm == null)
             {
                 lock (locker)
                 {
-                    farm = new PoultryFarm(ducks);
+                    if (farm == null) 
+                    {
+                        farm = new PoultryFarm();
+                    }
                 }
             }
             return farm;
+        }
 
+        public void Add(Duck[] ducks)
+        {
+            this.ducks = ducks;
         }
 
         public void Info()
         {
             Console.WriteLine("Утки: ");
-            for (int i = 0; i < ducks.Length; i++)
+            foreach (var duck in ducks)
             {
-                Console.WriteLine($"{i+1}. {ducks[i]}");
+                Console.WriteLine(duck.Name);
             }
         }
     }

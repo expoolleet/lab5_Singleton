@@ -1,32 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
-
+using lab5_Singleton.Ducks;
 
 namespace lab5_Singleton
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            string[] ducks = { "Домашняя утка", "Дикая утка", "Железная утка" };
+            var threds = new List<Thread>();
 
-            for (int i = 1; i < 6; i++)
+            Console.WriteLine("Генерирование 100 потоков...");
+            for (int i = 1; i < 100; i++)
             {
-                Thread thread = new Thread(Print);
+                Thread myThread = new(_ => PoultryFarm.Get());
+                threds.Add(myThread);   
             }
-            PoultryFarm farm = PoultryFarm.Get(ducks);
 
+            foreach (var item in threds)
+            {
+                item.Start();
+            }
 
+            foreach (var item in threds)
+            {
+                item.Join();
+            }
+
+            Console.WriteLine($"Количество ссылок на ферму: {PoultryFarm.Count}");
+
+            PoultryFarm farm = PoultryFarm.Get();
+
+            farm.Add(new Duck[] { new DomesticDuck(), new GrayDuck(), new WildDuck() });
             farm.Info();
 
             Console.ReadKey();
         }
-
-        private static void Print(object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Print() { Thread.Sleep(100); }
     }
 }
