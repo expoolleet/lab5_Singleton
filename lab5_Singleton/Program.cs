@@ -12,10 +12,11 @@ namespace lab5_Singleton
             var threds = new List<Thread>();
 
             Console.WriteLine("Генерирование 100 потоков...");
+
             for (int i = 1; i < 100; i++)
             {
                 Thread myThread = new(_ => PoultryFarm.Get());
-                threds.Add(myThread);   
+                threds.Add(myThread);
             }
 
             foreach (var item in threds)
@@ -33,6 +34,7 @@ namespace lab5_Singleton
             PoultryFarm farm = PoultryFarm.Get();
 
             farm.Add(new Duck[] { new DomesticDuck(), new GrayDuck(), new WildDuck() });
+
             farm.Info();
 
             Console.ReadKey();

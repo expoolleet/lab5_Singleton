@@ -1,18 +1,16 @@
-﻿using lab5_Singleton.Ducks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
+﻿using System;
+using lab5_Singleton.Ducks;
 
 namespace lab5_Singleton
 {
     class PoultryFarm
     {
         static object locker = new();
+
         private Duck[] ducks;
+
         private static PoultryFarm farm;
+
         static int count;
 
         static public int Count
@@ -26,6 +24,7 @@ namespace lab5_Singleton
                 count = value;
             }
         }
+
         private PoultryFarm()
         {
             count++;
@@ -37,7 +36,7 @@ namespace lab5_Singleton
             {
                 lock (locker)
                 {
-                    if (farm == null) 
+                    if (farm == null)
                     {
                         farm = new PoultryFarm();
                     }
